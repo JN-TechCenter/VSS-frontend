@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:3002/api/users/login', {
+      const response = await axios.post('/api/users/login', {
         username,
         password
       });

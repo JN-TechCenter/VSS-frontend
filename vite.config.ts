@@ -4,7 +4,31 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000,
-    host: true
+    // 使用环境变量端口，避免硬编码
+    port: parseInt(process.env.VITE_PORT || '3000'),
+    host: true,
+    // 代理配置 - 开发环境使用
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_PROXY_TARGET || 'http://backend:3002',
+        changeOrigin: true,
+        secure: false
+      },
+      '/ws': {
+        target: process.env.VITE_WS_PROXY_TARGET || 'ws://backend:3002',
+        ws: true,
+        changeOrigin: true
+      }
+    }
+  },
+  // 构建配置
+  build: {
+    outDir: 'dist',
+    sourcemap: process.env.NODE_ENV === 'development'
+  },
+  // 环境变量配置
+  define: {
+    __API_BASE_URL__: JSON.stringify(process.env.VITE_API_BASE_URL || '/api'),
+    __WS_URL__: JSON.stringify(process.env.VITE_WS_URL || '/ws')
   }
 });

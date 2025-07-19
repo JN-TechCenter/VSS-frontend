@@ -25,8 +25,9 @@ import {
 } from './types';
 
 export class VisionPlatformAPI implements APIClient {
-  private baseURL: string = import.meta.env.VITE_API_BASE_URL;
-  private scriptBaseURL: string = import.meta.env.VITE_SCRIPT_SERVICE_URL;
+  // 使用相对路径，避免硬编码端口
+  private baseURL: string = import.meta.env.VITE_API_BASE_URL || '/api';
+  private scriptBaseURL: string = import.meta.env.VITE_SCRIPT_SERVICE_URL || '/api/scripts';
   private token: string;
 
   constructor(token: string = '') {

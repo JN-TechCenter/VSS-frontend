@@ -15,19 +15,31 @@ const RegisterPage: React.FC = () => {
     setError('');
     setSuccess('');
 
+    console.log('开始注册流程...');
+
     try {
-      await axios.post('http://localhost:3002/api/users/register', {
+      console.log('发送注册请求到 /api/users/register');
+      const response = await axios.post('/api/users/register', {
         username,
         password,
         email
       });
 
+      console.log('注册成功响应:', response);
       setSuccess('注册成功！即将跳转到登录页面...');
       setTimeout(() => {
         navigate('/login');
       }, 2000);
     } catch (err: any) {
-      setError(err.response?.data?.error || '注册失败，请检查输入信息');
+      console.error('注册错误详情:', err);
+      console.error('错误响应:', err.response);
+      console.error('错误数据:', err.response?.data);
+      console.error('请求URL:', err.config?.url);
+      console.error('请求方法:', err.config?.method);
+      
+      const errorMessage = err.response?.data?.error || '注册失败，请检查输入信息';
+      console.log('显示的错误信息:', errorMessage);
+      setError(errorMessage);
     }
   };
 
