@@ -10,8 +10,8 @@ COPY package*.json ./
 # 复制环境文件
 COPY .env.proxy .env
 
-# 安装依赖
-RUN npm install
+# 设置 npm 镜像为淘宝源
+RUN npm config set registry https://registry.npmmirror.com && npm install
 
 # 复制源代码
 COPY . .
