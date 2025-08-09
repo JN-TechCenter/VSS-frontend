@@ -1,0 +1,5 @@
+# 核心忽略规则
+node_modules/
+dist/
+.env.local
+*.log
