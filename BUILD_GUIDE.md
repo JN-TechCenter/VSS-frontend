@@ -34,7 +34,7 @@ build/
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-COPY .env.proxy .env
+COPY .env .env
 RUN npm config set registry https://registry.npmmirror.com && npm install
 COPY . .
 RUN npm run build
@@ -42,7 +42,7 @@ RUN npm run build
 # 生产阶段
 FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY ../nginx/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```

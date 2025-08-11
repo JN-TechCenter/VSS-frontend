@@ -8,13 +8,17 @@ WORKDIR /app
 COPY package*.json ./
 
 # 复制环境文件
-COPY .env.proxy .env
+COPY .env .env
 
 # 设置 npm 镜像为淘宝源
 RUN npm config set registry https://registry.npmmirror.com && npm install
 
 # 复制源代码
 COPY . .
+
+# 设置生产环境变量
+ENV NODE_ENV=production
+ENV VITE_BUILD_MODE=production
 
 # 构建应用
 RUN npm run build
@@ -25,8 +29,7 @@ FROM nginx:alpine
 # 复制构建的文件到 nginx 目录
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# 复制 nginx 配置文件
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# 使用默认的 nginx 配置，通过 docker-compose 挂载统一配置
 
 # 暴露端口
 EXPOSE 80
