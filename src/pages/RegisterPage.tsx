@@ -1,3 +1,16 @@
+/**
+ * VSS视觉检测系统用户注册页面
+ * 
+ * 提供新用户注册功能，包括：
+ * - 用户名、密码、邮箱注册
+ * - 表单验证
+ * - 注册状态反馈
+ * - 注册成功后自动跳转
+ * 
+ * @author VSS Team
+ * @version 1.0.0
+ */
+
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Alert, Typography, Space, Divider } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined, PhoneOutlined, SafetyOutlined } from '@ant-design/icons';
@@ -6,14 +19,37 @@ import { VisionPlatformAPI } from '../api/client';
 import PageLayout from '../components/PageLayout';
 import { theme, commonStyles } from '../theme';
 
+/**
+ * 用户注册页面组件
+ * 
+ * 渲染注册表单和相关UI元素，处理用户注册逻辑
+ * 
+ * @returns JSX.Element - 注册页面组件
+ */
 const RegisterPage: React.FC = () => {
+  /** 用户名状态 */
   const [username, setUsername] = useState('');
+  
+  /** 密码状态 */
   const [password, setPassword] = useState('');
+  
+  /** 邮箱状态 */
   const [email, setEmail] = useState('');
+  
+  /** 错误信息状态 */
   const [error, setError] = useState('');
+  
+  /** 成功信息状态 */
   const [success, setSuccess] = useState('');
+  
+  /** 路由导航钩子 */
   const navigate = useNavigate();
 
+  /**
+   * 处理用户注册
+   * 
+   * @param e - 表单提交事件
+   */
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -53,6 +89,8 @@ const RegisterPage: React.FC = () => {
       subtitle="创建您的视觉检测系统账号"
       showHeader={false}
       showFloatingBalls={true}
+      withGradientBackground={true}
+      centered={true}
     >
       <Card style={{
         ...commonStyles.card,

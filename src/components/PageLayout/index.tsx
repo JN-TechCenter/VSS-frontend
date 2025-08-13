@@ -1,21 +1,62 @@
+/**
+ * VSS视觉检测系统页面布局组件
+ * 
+ * 提供统一的页面布局和样式，包括：
+ * - 可选的页面标题和副标题
+ * - 渐变背景和浮动装饰元素
+ * - 居中布局选项
+ * - 灵活的样式自定义
+ * 
+ * @author VSS Team
+ * @version 1.0.0
+ */
+
 import React from 'react';
 import { Typography } from 'antd';
 import { theme, commonStyles } from '../../theme';
 
 const { Title, Text } = Typography;
 
+/**
+ * 页面布局组件的属性接口
+ */
 interface PageLayoutProps {
+  /** 子组件内容 */
   children: React.ReactNode;
+  
+  /** 页面标题 */
   title?: string;
+  
+  /** 页面副标题 */
   subtitle?: string;
+  
+  /** 是否显示页面头部 */
   showHeader?: boolean;
+  
+  /** 头部自定义样式 */
   headerStyle?: React.CSSProperties;
+  
+  /** 容器自定义样式 */
   containerStyle?: React.CSSProperties;
+  
+  /** 是否使用渐变背景 */
   withGradientBackground?: boolean;
+  
+  /** 是否显示浮动装饰球 */
   withFloatingBalls?: boolean;
+  
+  /** 是否居中布局 */
   centered?: boolean;
 }
 
+/**
+ * 页面布局组件
+ * 
+ * 根据传入的属性渲染不同样式的页面布局
+ * 
+ * @param props - 组件属性
+ * @returns JSX.Element - 页面布局组件
+ */
 const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   title,

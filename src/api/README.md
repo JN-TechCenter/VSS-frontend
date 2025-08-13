@@ -170,8 +170,7 @@ const defectStats = await api.defects.getStatistics({
   deviceId: 'camera-01'
 });
 
-// 获取缺陷详情
-const defectDetail = await api.defects.getDetail('defect_001');
+
 ```
 
 ### 5. 报告生成API

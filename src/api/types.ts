@@ -126,29 +126,7 @@ export interface DefectStatistics {
   }>;
 }
 
-export interface DefectDetail {
-  id: string;
-  detectionId: string;
-  type: string;
-  severity: string;
-  description: string;
-  location: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  measurements?: {
-    expected: Record<string, number>;
-    actual: Record<string, number>;
-    tolerance: number;
-  };
-  images: Array<{
-    type: 'original' | 'annotated' | 'processed';
-    url: string;
-  }>;
-  createdAt: string;
-}
+
 
 // 5. 报告相关接口
 export interface ReportRequest {
@@ -281,7 +259,7 @@ export interface APIClient {
     period?: string;
     deviceId?: string;
   }): Promise<ApiResponse<DefectStatistics>>;
-  getDefectDetail(defectId: string): Promise<ApiResponse<DefectDetail>>;
+
   
   // 报告生成
   generateReport(request: ReportRequest): Promise<ApiResponse<Report>>;
@@ -307,11 +285,7 @@ export interface APIError {
   timestamp: string;
 }
 // 脚本定义
-export interface Script {
-  id: string;
-  name: string;
-  content: any[];
-}
+
 
 // 常量定义
 export const API_ENDPOINTS = {
@@ -333,7 +307,7 @@ export const API_ENDPOINTS = {
   
   // Defects
   DEFECT_STATISTICS: '/defects/statistics',
-  DEFECT_DETAIL: (id: string) => `/defects/${id}`,
+
   
   // Reports
   REPORTS_QUALITY: '/reports/quality',
@@ -352,9 +326,7 @@ export const API_ENDPOINTS = {
   // WebSocket
   WEBSOCKET: 'wss://api.vision-platform.com/ws'
   ,
-  // Scripts
-  SCRIPTS: '/scripts',
-  SCRIPT_RUN: (id: string) => `/scripts/run/${id}`
+
 } as const;
 
 export const HTTP_STATUS = {

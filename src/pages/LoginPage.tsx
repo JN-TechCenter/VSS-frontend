@@ -1,3 +1,16 @@
+/**
+ * VSS视觉检测系统登录页面
+ * 
+ * 提供用户登录功能，包括：
+ * - 用户名密码登录
+ * - 表单验证
+ * - 登录状态管理
+ * - 美观的UI设计和动画效果
+ * 
+ * @author VSS Team
+ * @version 1.0.0
+ */
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +20,11 @@ import { VisionPlatformAPI } from '../api/client';
 import PageLayout from '../components/PageLayout';
 import { theme, commonStyles } from '../theme';
 
-// 添加CSS动画
+/**
+ * 添加浮动动画CSS样式
+ * 
+ * 动态创建并注入CSS样式，包括浮动动画和交互效果
+ */
 const addFloatAnimation = () => {
   const style = document.createElement('style');
   style.textContent = `
@@ -35,15 +52,37 @@ const addFloatAnimation = () => {
 
 const { Title, Text } = Typography;
 
+/**
+ * 登录页面组件
+ * 
+ * 渲染登录表单和相关UI元素，处理用户登录逻辑
+ * 
+ * @returns JSX.Element - 登录页面组件
+ */
 const LoginPage: React.FC = () => {
+  /** 登录加载状态 */
   const [loading, setLoading] = useState(false);
+  
+  /** 错误信息状态 */
   const [error, setError] = useState('');
+  
+  /** 路由导航钩子 */
   const navigate = useNavigate();
 
+  /**
+   * 组件挂载时添加动画样式
+   */
   useEffect(() => {
     addFloatAnimation();
   }, []);
 
+  /**
+   * 处理用户登录
+   * 
+   * @param values - 表单值，包含用户名和密码
+   * @param values.username - 用户名
+   * @param values.password - 密码
+   */
   const handleLogin = async (values: { username: string; password: string }) => {
     setLoading(true);
     setError('');
@@ -72,6 +111,7 @@ const LoginPage: React.FC = () => {
       subtitle="Vision Security System - 智能视觉安全检测平台"
       showHeader={false}
       showFloatingBalls={true}
+      withGradientBackground={true}
       centered={true}
     >
       
