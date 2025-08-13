@@ -29,7 +29,8 @@ FROM nginx:alpine
 # 复制构建的文件到 nginx 目录
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# 使用默认的 nginx 配置，通过 docker-compose 挂载统一配置
+# 复制自定义 nginx 配置
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # 暴露端口
 EXPOSE 80

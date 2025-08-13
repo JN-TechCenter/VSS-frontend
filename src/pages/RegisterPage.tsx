@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Form, Input, Button, Card, Alert, Typography, Space, Divider } from 'antd';
+import { UserOutlined, LockOutlined, MailOutlined, PhoneOutlined, SafetyOutlined } from '@ant-design/icons';
+import { useNavigate, Link } from 'react-router-dom';
+import { VisionPlatformAPI } from '../api/client';
+import PageLayout from '../components/PageLayout';
+import { theme, commonStyles } from '../theme';
 
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -19,7 +23,7 @@ const RegisterPage: React.FC = () => {
 
     try {
       console.log('发送注册请求到 /api/users/register');
-      const response = await axios.post('/api/users/register', {
+      const response = await VisionPlatformAPI.post('/api/users/register', {
         username,
         password,
         email
@@ -44,50 +48,135 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div style={containerStyle}>
-      <div style={cardStyle}>
-        <h2 style={titleStyle}>用户注册</h2>
-        {error && <div style={errorStyle}>{error}</div>}
-        {success && <div style={successStyle}>{success}</div>}
-        <form onSubmit={handleRegister} style={formStyle}>
-          <div style={formGroupStyle}>
-            <label style={labelStyle}>用户名</label>
-            <input
-              type="text"
+    <PageLayout 
+      title="注册 VSS 账号"
+      subtitle="创建您的视觉检测系统账号"
+      showHeader={false}
+      showFloatingBalls={true}
+    >
+      <Card style={{
+        ...commonStyles.card,
+        width: '100%',
+        maxWidth: 450,
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(10px)',
+        animation: 'slideInUp 0.6s ease-out'
+      }}>
+        <div style={{
+          textAlign: 'center',
+          marginBottom: theme.spacing.xl
+        }}>
+          <SafetyOutlined style={{
+            fontSize: '48px',
+            color: theme.colors.primary,
+            marginBottom: theme.spacing.md
+          }} />
+          <Typography.Title level={2} style={{
+            background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            marginBottom: theme.spacing.sm,
+            fontWeight: 'bold',
+            fontSize: theme.fontSize.xl
+          }}>
+            注册 VSS 账号
+          </Typography.Title>
+          <Typography.Text style={{
+            color: theme.colors.text.secondary,
+            fontSize: theme.fontSize.md
+          }}>
+            创建您的视觉检测系统账号
+          </Typography.Text>
+        </div>
+        {error && <Alert message={error} type="error" showIcon style={{ marginBottom: theme.spacing.md }} />}
+        {success && <Alert message={success} type="success" showIcon style={{ marginBottom: theme.spacing.md }} />}
+        <Form onFinish={handleRegister} layout="vertical" size="large">
+          <Form.Item
+            name="username"
+            label="用户名"
+            rules={[{ required: true, message: '请输入用户名' }]}
+          >
+            <Input
+              prefix={<UserOutlined />}
+              placeholder="请输入用户名"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required
-              style={inputStyle}
+              style={{
+                borderRadius: theme.borderRadius.md,
+                border: `1px solid ${theme.colors.border}`,
+                transition: 'all 0.3s ease'
+              }}
             />
-          </div>
-          <div style={formGroupStyle}>
-            <label style={labelStyle}>密码</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              style={inputStyle}
-            />
-          </div>
-          <div style={formGroupStyle}>
-            <label style={labelStyle}>邮箱</label>
-            <input
-              type="email"
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="邮箱"
+            rules={[
+              { required: true, message: '请输入邮箱' },
+              { type: 'email', message: '请输入有效的邮箱地址' }
+            ]}
+          >
+            <Input
+              prefix={<MailOutlined />}
+              placeholder="请输入邮箱"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
-              style={inputStyle}
+              style={{
+                borderRadius: theme.borderRadius.md,
+                border: `1px solid ${theme.colors.border}`,
+                transition: 'all 0.3s ease'
+              }}
             />
-          </div>
-          <button type="submit" style={buttonStyle}>注册</button>
-        </form>
-        <div style={loginLinkStyle}>
-          已有账号？ <a href="/login" style={linkStyle}>立即登录</a>
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="密码"
+            rules={[
+              { required: true, message: '请输入密码' },
+              { min: 6, message: '密码至少6位' }
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="请输入密码"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                borderRadius: theme.borderRadius.md,
+                border: `1px solid ${theme.colors.border}`,
+                transition: 'all 0.3s ease'
+              }}
+            />
+          </Form.Item>
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              size="large"
+              style={{
+                background: `linear-gradient(135deg, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)`,
+                border: 'none',
+                borderRadius: theme.borderRadius.md,
+                height: '48px',
+                fontSize: theme.fontSize.md,
+                fontWeight: 'bold',
+                boxShadow: theme.shadows.md,
+                transition: 'all 0.3s ease'
+              }}
+            >
+              立即注册
+            </Button>
+          </Form.Item>
+        </Form>
+        <Divider style={{ margin: `${theme.spacing.lg} 0` }} />
+        <div style={{ textAlign: 'center' }}>
+          <Typography.Text style={{ color: theme.colors.text.secondary }}>
+            已有账号？ <Link to="/login" style={{ color: theme.colors.primary, textDecoration: 'none' }}>立即登录</Link>
+          </Typography.Text>
         </div>
-      </div>
-    </div>
+      </Card>
+    </PageLayout>
   );
 };
 

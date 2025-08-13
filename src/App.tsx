@@ -4,10 +4,11 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import { ConfigProvider, theme } from 'antd';
 import MainLayout from './layouts/MainLayout';
-import Dashboard from './pages/Dashboard';
-import Detail from './pages/Detail';
+import Home from './pages/Home';
+import DataScreen from './pages/DataScreen';
+import ModelConfig from './pages/ModelConfig';
+import HealthMonitor from './pages/HealthMonitor';
 import Settings from './pages/Settings';
-import ScriptsPage from './pages/ScriptsPage';
 import PrivateRoute from './components/PrivateRoute';
 import './assets/index.css';
 
@@ -45,9 +46,9 @@ const App: React.FC = () => {
     >
       <Router>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />} />
-          <Route path="/login" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
-          <Route path="/register" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <RegisterPage />} />
+          <Route path="/" element={isLoggedIn ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />} />
+          <Route path="/login" element={isLoggedIn ? <Navigate to="/home" replace /> : <LoginPage />} />
+          <Route path="/register" element={isLoggedIn ? <Navigate to="/home" replace /> : <RegisterPage />} />
           <Route 
             path="/*" 
             element={
@@ -56,10 +57,11 @@ const App: React.FC = () => {
               </PrivateRoute>
             } 
           >
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="detail" element={<Detail />} />
+            <Route path="home" element={<Home />} />
+            <Route path="data-screen" element={<DataScreen />} />
+            <Route path="model-config" element={<ModelConfig />} />
+            <Route path="health-monitor" element={<HealthMonitor />} />
             <Route path="settings" element={<Settings />} />
-            <Route path="scripts" element={<ScriptsPage />} />
           </Route>
         </Routes>
       </Router>

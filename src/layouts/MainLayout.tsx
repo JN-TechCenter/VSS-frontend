@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Typography, Avatar, Dropdown, Space, Badge, Modal, Drawer, List } from 'antd';
 import { 
+  HomeOutlined,
   DashboardOutlined, 
   EyeOutlined, 
   SettingOutlined, 
+  ExperimentOutlined,
+  HeartOutlined,
   MenuFoldOutlined, 
   MenuUnfoldOutlined,
   BellOutlined,
   UserOutlined,
+  UserOutlined as UserIcon,
   LogoutOutlined,
   CodeOutlined
 } from '@ant-design/icons';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { theme, commonStyles } from '../theme';
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
 
 const menuItems = [
-  { key: '/dashboard', icon: <DashboardOutlined />, label: <Link to="/dashboard">数据概览</Link> },
-  { key: '/detail', icon: <EyeOutlined />, label: <Link to="/detail">详细分析</Link> },
-  { key: '/scripts', icon: <CodeOutlined />, label: <Link to="/scripts">脚本编排</Link> },
+  { key: '/home', icon: <HomeOutlined />, label: <Link to="/home">首页</Link> },
+  { key: '/data-screen', icon: <DashboardOutlined />, label: <Link to="/data-screen">数据大屏</Link> },
+  { key: '/model-config', icon: <ExperimentOutlined />, label: <Link to="/model-config">模型配置</Link> },
+  { key: '/health-monitor', icon: <HeartOutlined />, label: <Link to="/health-monitor">健康监控</Link> },
   { key: '/settings', icon: <SettingOutlined />, label: <Link to="/settings">系统设置</Link> },
 ];
 
@@ -77,8 +83,16 @@ const MainLayout: React.FC = () => {
         collapsible 
         collapsed={collapsed}
         style={{
-          background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
-          boxShadow: '2px 0 8px rgba(0,0,0,0.15)'
+          background: theme.colors.gradients.primary,
+          boxShadow: theme.shadows.md,
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          zIndex: 100,
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <div style={{ 
@@ -86,35 +100,60 @@ const MainLayout: React.FC = () => {
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center',
-          borderBottom: '1px solid rgba(255,255,255,0.1)'
+          borderBottom: `1px solid ${theme.colors.text.white}20`,
+          padding: theme.spacing.md,
         }}>
           {!collapsed ? (
-            <Title level={4} style={{ color: 'white', margin: 0 }}>
+            <Title level={4} style={{ 
+              color: theme.colors.text.white, 
+              margin: 0,
+              fontSize: theme.fontSize.lg,
+              fontWeight: theme.fontWeight.bold,
+            }}>
               🔍 Vision AI
             </Title>
           ) : (
-            <span style={{ color: 'white', fontSize: '18px' }}>🔍</span>
+            <span style={{ 
+              color: theme.colors.text.white, 
+              fontSize: theme.fontSize.lg 
+            }}>🔍</span>
           )}
         </div>
-        <Menu 
-          theme="dark" 
-          mode="inline" 
-          selectedKeys={[location.pathname]} 
-          items={menuItems}
-          style={{ 
-            background: 'transparent',
-            border: 'none'
-          }}
-        />
+        <div style={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}>
+          <Menu 
+            theme="dark" 
+            mode="inline" 
+            selectedKeys={[location.pathname]} 
+            items={menuItems}
+            style={{ 
+              background: 'transparent',
+              border: 'none',
+              height: '100%',
+            }}
+          />
+        </div>
       </Sider>
-      <Layout>
+      <Layout style={{
+          marginLeft: collapsed ? 80 : 200,
+          transition: 'margin-left 0.2s',
+        }}>
         <Header style={{ 
-          background: 'white', 
-          padding: '0 24px',
+          background: theme.colors.background.card, 
+          padding: `0 ${theme.spacing.lg}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+          boxShadow: theme.shadows.sm,
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          left: collapsed ? 80 : 200,
+          zIndex: 99,
+          transition: 'left 0.2s',
         }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Button
@@ -122,12 +161,20 @@ const MainLayout: React.FC = () => {
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
               style={{
-                fontSize: '16px',
+                ...commonStyles.button,
+                fontSize: theme.fontSize.md,
                 width: 64,
                 height: 64,
+                color: theme.colors.text.primary,
               }}
             />
-            <Title level={5} style={{ margin: 0, marginLeft: 16, color: '#262626' }}>
+            <Title level={5} style={{ 
+              margin: 0, 
+              marginLeft: theme.spacing.md, 
+              color: theme.colors.text.primary,
+              fontSize: theme.fontSize.lg,
+              fontWeight: theme.fontWeight.semibold,
+            }}>
               机器视觉数据分析平台
             </Title>
           </div>
@@ -138,33 +185,39 @@ const MainLayout: React.FC = () => {
                 type="text" 
                 icon={<BellOutlined />} 
                 size="large"
-                style={{ color: '#666' }}
+                style={{ 
+                  ...commonStyles.button,
+                  color: theme.colors.text.secondary 
+                }}
                 onClick={() => setNotificationsVisible(true)}
               />
             </Badge>
             <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
               <Space style={{ cursor: 'pointer' }}>
                 <Avatar 
-                  style={{ backgroundColor: '#1890ff' }} 
+                  style={{ backgroundColor: theme.colors.primary }} 
                   icon={<UserOutlined />} 
                 />
-                <span style={{ color: '#262626' }}>{username || '未登录'}</span>
+                <span style={{ 
+                  color: theme.colors.text.primary,
+                  fontSize: theme.fontSize.md,
+                  fontWeight: theme.fontWeight.medium,
+                }}>{username || '未登录'}</span>
               </Space>
             </Dropdown>
           </Space>
         </Header>
         <Content style={{ 
-          margin: 24,
-          background: '#f5f5f5',
-          borderRadius: 8,
+          margin: theme.spacing.lg,
+          marginTop: `calc(64px + ${theme.spacing.lg})`,
+          background: theme.colors.background.default,
+          borderRadius: theme.borderRadius.md,
           overflow: 'auto'
         }}>
           <div style={{ 
-            background: 'white',
-            padding: 24,
+            ...commonStyles.card,
+            padding: theme.spacing.lg,
             minHeight: 'calc(100vh - 112px)',
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
           }}>
             <Outlet />
           </div>
